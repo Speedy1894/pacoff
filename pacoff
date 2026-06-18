@@ -66,7 +66,9 @@ PARSEDOPTS=$(getopt --options=$SOPERATIONS --longoptions=$LOPERATIONS --name $(b
 eval set -- "$PARSEDOPTS"
 
 
+#TODO: default options need to change based on operation
 # Set default options
+operationcount=0
 operation=''
 help=false
 dbpath=/var/lib/pacman
@@ -78,43 +80,26 @@ refresh=false
 #(this will grow once I get to it)
 
 
-#TODO: start using integer values as they are more flexible and will be needed for flag counting anyway
-# Look for operation (also prints help if present)
+# Look for operation
 while true; do
     case "$1" in
-        -V|--version)
-            [[ -n $operation ]] && print_log E 'only one operation may be used at a time' && exit 1
-            operation='V'
-            ;;
-        -I|--install)
-            [[ -n $operation ]] && print_log E 'only one operation may be used at a time' && exit 1
-            operation='I'
-            ;;
-        -Q|--query)
-            [[ -n $operation ]] && print_log E 'only one operation may be used at a time' && exit 1
-            operation='Q'
-            ;;
-        -R|--remove)
-            [[ -n $operation ]] && print_log E 'only one operation may be used at a time' && exit 1
-            operation='R'
-            ;;
-        -S|--sync)
-            [[ -n $operation ]] && print_log E 'only one operation may be used at a time' && exit 1
-            operation='S'
-            ;;
-        -h|--help)
-            help=true
-            ;;
-        --)
-            shift
-            break
-            ;;
-        *)
-            ;;
+        -V|--version) operation='V'; let operationcount++ ;;
+        -I|--install) operation='I'; let operationcount++ ;;
+        -Q|--query) operation='Q'; let operationcount++ ;;
+        -R|--remove) operation='R'; let operationcount++ ;;
+        -S|--sync) operation='S'; let operationcount++ ;;
+        -h|--help) help=true ;;
+        --) break ;;
+        *) ;;
     esac
     shift
 done
 
+# Error if the user is asking too much
+if [[ $operationcount -gt 1 ]]; then
+    print_log E 'only one operation may be used at a time'
+    exit 1
+fi
 
 # display help message, if applicable
 if [[ $help = true ]] || [[ "$operation" = 'V' ]]; then
@@ -123,7 +108,7 @@ if [[ $help = true ]] || [[ "$operation" = 'V' ]]; then
 fi
 
 # print hint for uninformed users
-if [[ -z $operation ]]; then
+if [[ $operationcount -eq 0 ]]; then
     print_log E 'no operation specified (use -h for help)'
     exit 1
 fi

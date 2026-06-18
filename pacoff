@@ -30,7 +30,12 @@ EOF
 #  '--'      / /
 #           '-'
         ;;
-        I) print_log W 'Help message not implemented' ;;
+        I) cat <<EOF
+usage:  pacoff {-I --install} <options>
+options:
+  -b, --dbpath <path>  set an alternate database location
+EOF
+        ;;
         Q) print_log W 'Help message not implemented' ;;
         R) print_log W 'Help message not implemented' ;;
         S) print_log W 'Help message not implemented' ;;
@@ -40,7 +45,7 @@ operations:
     pacoff {-h --help}
     pacoff {-V --version}
     pacoff {-I --install} <options>
-    pacoff {-Q --query}   <options> [package(s)]
+    pacoff {-Q --query}   [options] [package(s)]
     pacoff {-R --remove}  [options] <package(s)>
     pacoff {-S --sync}    [options] [pacakge(s)]
 

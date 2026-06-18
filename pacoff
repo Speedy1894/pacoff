@@ -1,0 +1,51 @@
+#!/usr/bin/bash
+
+print_log () {
+    case "$1" in
+        E) echo -e "[\x1b[31mERROR\x1b[39m] $2" >&2 ;;
+        W) echo -e "[\x1b[33mWARN\x1b[39m] $2" >&2 ;;
+        I) echo -e "[\x1b[32mINFO\x1b[39m] $2" >&2 ;;
+    esac
+}
+
+
+display_help () {
+    case "$1" in
+        V) cat <<EOF
+   .--.
+   |  |
+   |  |      Pacoff v0.0.1
+  -'  '-     Copyleft (:3) 2026 Speedy1894
+  \\    /
+   \\  /      This program may be freely distributed
+    \\/       however you see fit, I guess -- I can't
+.--.  .--.   really stop you.
+|   \/   |
+'--------'
+EOF
+#           .-.
+#  .--.      \\ \\
+# / _.-' .-.  | |   Pacoff v0.0.1
+# \\  '-. '-'  | |   Copyleft (:3) 2026-2026 Speedy1894
+#  '--'      / /
+#           '-'
+        ;;
+        I) print_log W 'Help message not implemented' ;;
+        Q) print_log W 'Help message not implemented' ;;
+        R) print_log W 'Help message not implemented' ;;
+        S) print_log W 'Help message not implemented' ;;
+        *) cat <<EOF
+usage:  pacoff <operation> [...]
+operations:
+    pacoff {-h --help}
+    pacoff {-V --version}
+    pacoff {-I --install} <options>
+    pacoff {-Q --query}   <options> [package(s)]
+    pacoff {-R --remove}  [options] <package(s)>
+    pacoff {-S --sync}    [options] [pacakge(s)]
+
+use 'pacoff {-h --help}' with an operation for available options
+EOF
+           ;;
+    esac
+}

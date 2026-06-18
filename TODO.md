@@ -21,3 +21,4 @@
 
 ## Other
 - Command-line argument parsing
+- Think about a better name for copying database and injecting packages than "install"

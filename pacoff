@@ -51,7 +51,6 @@ EOF
 }
 
 
-
 # Test for enhanced getopt, since that's how we parse cmdline args
 getopt --test > /dev/null && true
 if [[ $? -ne 4 ]]; then
@@ -63,18 +62,23 @@ fi
 LOPERATIONS=help,version,install,query,remove,sync
 SOPERATIONS=hVIQRS
 
-
 PARSEDOPTS=$(getopt --options=$SOPERATIONS --longoptions=$LOPERATIONS --name $(basename "$0") -- "$@") || exit
 eval set -- "$PARSEDOPTS"
-echo $PARSEDOPTS  # dev
 
 
 # Set default options
 operation=''
 help=false
 dbpath=/var/lib/pacman
+cachedir=/var/cache/pacman/pkg
+gpgdir=/etc/pacman.d/gnupg
+hookdir=/etc/pacman.d/hooks
+color=auto
+refresh=false
+#(this will grow once I get to it)
 
 
+#TODO: start using integer values as they are more flexible and will be needed for flag counting anyway
 # Look for operation (also prints help if present)
 while true; do
     case "$1" in
@@ -110,8 +114,6 @@ while true; do
     esac
     shift
 done
-
-echo "$operation $help $dbpath"  # dev
 
 
 # display help message, if applicable

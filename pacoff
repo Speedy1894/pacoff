@@ -43,7 +43,7 @@ EOF
 # / _.-' .-.  | |   Pacoff v0.0.1
 # \\  '-. '-'  | |   Copyleft (:3) 2026-2026 Speedy1894
 #  '--'      / /
-        #           '-'
+#           '-'
         return 0
     fi
     
@@ -56,19 +56,32 @@ EOF
         *) print_log W 'Help message not implemented'; return 1 ;;
     esac
     echo 'options:'
-
-    local optionlist
-    declare -a optionlist  # All options will be added here, then sorted
     
-    if [[ "$1" = 'I' ]]; then
-        optionlist+=('  -b, --dbpath <path>  set an alternate pacman database location')
-        optionlist+=('      --gpgdir <dir>   set an alternate home directory for pacman'\''s GnuPG keys')
-        optionlist+=('      --cachedir <dir> set an alternate pacman package cache location')
+    local soptionlist
+    declare -a soptionlist  # All options will be added here, then sorted
+    local loptionlist
+    declare -a loptionlist  # same but for options with only long format
+    
+    #NOTE: All options should be kept to a maximum of 80 characters (note the leading spaces)
+    soptionlist+=('-l, --location <path> set an alternate pacoff directory')
+    loptionlist+=('--color <when>   colorize the output')
+    
+    if [[ "$1" = I ]]; then
+        soptionlist+=('-b, --dbpath <path>   set an alternate pacman database location')
+        loptionlist+=('--cachedir <dir>  set an alternate pacman package cache location')
+        loptionlist+=('--gpgdir <dir>    set an alternate home directory for pacman'\''s GnuPG keys')
+    fi
+    if [[ "$1" = [RS] ]]; then
+        soptionlist+=('-d, --nodeps          skip dependency checks (-dd to skip all checks)')
     fi
     
     # Print options
-    IFS=$'\n' optionlist=($(sort <<<"${optionlist[*]}")); unset IFS
-    printf "%s\n" "${optionlist[@]}"
+    IFS=$'\n'
+    soptionlist=($(sort <<<"${soptionlist[*]}"))
+    loptionlist=($(sort <<<"${loptionlist[*]}"))
+    unset IFS
+    printf "  %s\n" "${soptionlist[@]}"
+    printf "      %s\n" "${loptionlist[@]}"
 }
 
 

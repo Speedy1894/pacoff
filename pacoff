@@ -10,8 +10,23 @@ print_log () {
 
 
 display_help () {
-    case "$1" in
-        V) cat <<EOF
+    # Start with standalone help messages
+    if [[ -z "$1" ]]; then  # Print generic help
+        cat <<EOF
+usage:  pacoff <operation> [...]
+operations:
+    pacoff {-h --help}
+    pacoff {-V --version}
+    pacoff {-I --install} <options>
+    pacoff {-Q --query}   [options] [package(s)]
+    pacoff {-R --remove}  [options] <package(s)>
+    pacoff {-S --sync}    [options] [pacakge(s)]
+
+use 'pacoff {-h --help}' with an operation for available options
+EOF
+        return 0
+    elif [[ "$1" = 'V' ]]; then  # Print version info
+        cat <<EOF
    .--.
    |  |
    |  |      Pacoff v0.0.1
@@ -28,31 +43,32 @@ EOF
 # / _.-' .-.  | |   Pacoff v0.0.1
 # \\  '-. '-'  | |   Copyleft (:3) 2026-2026 Speedy1894
 #  '--'      / /
-#           '-'
-        ;;
-        I) cat <<EOF
-usage:  pacoff {-I --install} <options>
-options:
-  -b, --dbpath <path>  set an alternate database location
-EOF
-        ;;
-        Q) print_log W 'Help message not implemented' ;;
-        R) print_log W 'Help message not implemented' ;;
-        S) print_log W 'Help message not implemented' ;;
-        *) cat <<EOF
-usage:  pacoff <operation> [...]
-operations:
-    pacoff {-h --help}
-    pacoff {-V --version}
-    pacoff {-I --install} <options>
-    pacoff {-Q --query}   [options] [package(s)]
-    pacoff {-R --remove}  [options] <package(s)>
-    pacoff {-S --sync}    [options] [pacakge(s)]
-
-use 'pacoff {-h --help}' with an operation for available options
-EOF
-           ;;
+        #           '-'
+        return 0
+    fi
+    
+    # Combined help messages w/ shared lines
+    case "$1" in
+        I) echo 'usage:  pacoff {-I --install} <options>' ;;
+        Q) echo 'usage:  pacoff {-Q --query} <options>' ;;
+        R) echo 'usage:  pacoff {-R --remove} <options>' ;;
+        S) echo 'usage:  pacoff {-S --sync} <options>' ;;
+        *) print_log W 'Help message not implemented'; return 1 ;;
     esac
+    echo 'options:'
+
+    local optionlist
+    declare -a optionlist  # All options will be added here, then sorted
+    
+    if [[ "$1" = 'I' ]]; then
+        optionlist+=('  -b, --dbpath <path>  set an alternate pacman database location')
+        optionlist+=('      --gpgdir <dir>   set an alternate home directory for pacman'\''s GnuPG keys')
+        optionlist+=('      --cachedir <dir> set an alternate pacman package cache location')
+    fi
+    
+    # Print options
+    IFS=$'\n' optionlist=($(sort <<<"${optionlist[*]}")); unset IFS
+    printf "%s\n" "${optionlist[@]}"
 }
 
 

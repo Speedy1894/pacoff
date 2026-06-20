@@ -9,4 +9,5 @@ list:
 build outputfile="pacoff":
     #!/usr/bin/bash
     cat - $(find src/ -type f | sort) <<<'#!/usr/bin/bash' > '{{outputfile}}'
+    chmod +x '{{outputfile}}'
     echo "Printed $(grep -c '' {{outputfile}}) lines to '{{outputfile}}'"

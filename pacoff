@@ -12,7 +12,7 @@ print_log () {
 display_help () {
     # Start with standalone help messages
     if [[ -z "$1" ]]; then  # Print generic help
-        cat <<EOF
+        cat <<'EOF'
 usage:  pacoff <operation> [...]
 operations:
     pacoff {-h --help}
@@ -26,22 +26,22 @@ use 'pacoff {-h --help}' with an operation for available options
 EOF
         return 0
     elif [[ "$1" = 'V' ]]; then  # Print version info
-        cat <<EOF
+        cat <<'EOF'
    .--.
    |  |
    |  |      Pacoff v0.0.1
   -'  '-     Copyleft (:3) 2026 Speedy1894
-  \\    /
-   \\  /      This program may be freely distributed
-    \\/       however you see fit, I guess -- I can't
+  \    /
+   \  /      This program may be freely distributed
+    \/       however you see fit, I guess -- I can't
 .--.  .--.   really stop you.
 |   \/   |
 '--------'
 EOF
 #           .-.
-#  .--.      \\ \\
+#  .--.      \ \
 # / _.-' .-.  | |   Pacoff v0.0.1
-# \\  '-. '-'  | |   Copyleft (:3) 2026-2026 Speedy1894
+# \  '-. '-'  | |   Copyleft (:3) 2026-2026 Speedy1894
 #  '--'      / /
 #           '-'
         return 0

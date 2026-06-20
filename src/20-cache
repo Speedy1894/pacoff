@@ -1,0 +1,21 @@
+#!/usr/bin/bash
+
+get_cache_list () {
+    # Get a list of packages that *should* be in the pacoff cache.
+    #
+    # This uses the `pkglist` file at the root of the pacoff directory,
+    # so `pwd` should already be set to the pacoff directory before
+    # running the function.
+    #
+    # This function only returns the names of the packages themselves!
+    # For a true list, the caller must also check for files with '.sig'
+    # appended.
+    local wantslist
+    declare -a wantslist  # list of wanted packages as obtained from pkglist
+    
+    while read -r line; do
+        wantslist+=("${line#* }")  # Get only second word on each line
+    done < 'pkglist'
+    
+    pacman --sync --print --print-format='%f' -- ${wantslist[@]}
+}

@@ -1,0 +1,74 @@
+#!/usr/bin/bash
+
+# Test for enhanced getopt, since that's how we parse cmdline args
+getopt --test > /dev/null && true
+if [[ $? -ne 4 ]]; then
+    print_log E '`getopt --test` failed in this environment. This script cannot run.'
+    exit 1
+fi
+
+
+LOPERATIONS=help,version,install,query,remove,sync
+SOPERATIONS=hVIQRS
+
+PARSEDOPTS=$(getopt --options=$SOPERATIONS --longoptions=$LOPERATIONS --name $(basename "$0") -- "$@") || exit
+eval set -- "$PARSEDOPTS"
+
+
+#TODO: default options need to change based on operation
+# Set default options
+operationcount=0
+operation=''
+help=false
+dbpath=/var/lib/pacman
+cachedir=/var/cache/pacman/pkg
+gpgdir=/etc/pacman.d/gnupg
+hookdir=/etc/pacman.d/hooks
+color=auto
+refresh=false
+#(this will grow once I get to it)
+
+
+# Look for operation
+while true; do
+    case "$1" in
+        -V|--version) operation='V'; let operationcount++ ;;
+        -I|--install) operation='I'; let operationcount++ ;;
+        -Q|--query) operation='Q'; let operationcount++ ;;
+        -R|--remove) operation='R'; let operationcount++ ;;
+        -S|--sync) operation='S'; let operationcount++ ;;
+        -h|--help) help=true ;;
+        --) break ;;
+        *) ;;
+    esac
+    shift
+done
+
+# Error if the user is asking too much
+if [[ $operationcount -gt 1 ]]; then
+    print_log E 'only one operation may be used at a time'
+    exit 1
+fi
+
+# display help message, if applicable
+if [[ $help = true ]] || [[ "$operation" = 'V' ]]; then
+    display_help $operation
+    exit 0
+fi
+
+# print hint for uninformed users
+if [[ $operationcount -eq 0 ]]; then
+    print_log E 'no operation specified (use -h for help)'
+    exit 1
+fi
+
+
+# following two lines should be parsed after operation is determined
+# LOPTIONS=
+# SOPTIONS=
+
+
+# flow for cmdline arg parsing:
+#     - default values for all possible args are laid out
+#     - operation is determined (or error thrown if multiple were specified)
+#     - separately (depending on operation), other args are determined

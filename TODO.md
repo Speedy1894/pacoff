@@ -2,6 +2,7 @@
 
 ## DB Cloning
 - Copy package databases from offline system
+- Needs to also get pacman.conf & gpgdir from original device, since it may have different repos
 
 
 ## Package Fetching
@@ -13,8 +14,6 @@
 
 - The installation list will be used for both downloading and final installation
 
-- Needs to also get pacman.conf & gpgdir from original device, since it may have different repos
-
 
 ## Package Installation
 - Copying the files to the offline system's pacman database should start by checking for potential clobbers, and exit if a conflict is found
@@ -23,4 +22,4 @@
 
 ## Other
 - Command-line argument parsing
-- Think about a better name for copying database and injecting packages than "install"
+- Test cases!

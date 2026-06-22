@@ -11,10 +11,8 @@ clone_database () {
     #
     # ret 1 -- Database already exists
     # ret 2 -- Pacman database is locked
-    if [[ -e 'db' ]]; then
-        return 1
-    fi
-    if [[ -e "$1/db.lck" ]]; then
-        return 2
-    fi
+    [[ -e 'db' ]] && return 1
+    [[ -e "$1/db.lck" ]] && return 2
+    
+    
     }

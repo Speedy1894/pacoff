@@ -26,4 +26,23 @@ clone_database () {
     return 0
 }
 
-#TODO: create pkglist, copy keyring, copy pacman.conf
+
+clone_keyring () {
+    # Copy the pacman GPG keys to the pacoff directory.
+    #
+    # The caller should have already chdir-ed into the pacoff
+    # directory. This functon will not clobber any existing files, so
+    # those must be removed beforehand.
+    #
+    # $1 -- Location of the pacman keyring (e.g., '/etc/pacman.d/gnupg')
+    #
+    # ret 1 -- Keyring already exists
+    [[ -e 'gnupg' ]] &&
+        return 1
+    
+    mkdir -- 'gnupg'
+    cp -- $(find "$1" -maxdepth 1 -type f -perm -0444) 'gnupg'
+    
+    return 0
+}
+#TODO: create pkglist, copy pacman.conf

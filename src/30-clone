@@ -8,11 +8,25 @@ clone_database () {
     # those must be removed beforehand.
     #
     # $1 -- Location of the pacman database (e.g., '/var/lib/pacman')
+    # $2 -- (bool) Whether 'file' (-F) dbs should be copied
     #
     # ret 1 -- Database already exists
     # ret 2 -- Pacman database is locked
-    [[ -e 'db' ]] && return 1
-    [[ -e "$1/db.lck" ]] && return 2
+    [[ -e 'db' ]] &&
+        return 1
+    [[ -e "$1/db.lck" ]] &&
+        return 2
     
+    mkdir -- 'db'
     
-    }
+    cp -R -- "$1/local" 'db/local'
+    
+    mkdir -- 'db/sync'
+    cp -- $(find "$1/sync" -maxdepth 1 -type f -name '*.db') 'db/sync/'
+    [[ "$2" = true ]] &&
+        cp -- $(find "$1/sync" -maxdepth 1 -type f -name '*.files') 'db/sync/'
+    
+    return 0
+}
+
+#TODO: create pkglist, copy keyring, copy pacman.conf

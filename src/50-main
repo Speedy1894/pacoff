@@ -8,8 +8,8 @@ if [[ $? -ne 4 ]]; then
 fi
 
 
-LOPERATIONS=help,version,install,query,remove,sync
-SOPERATIONS=hVIQRS
+LOPERATIONS=help,version,clone,install,query,remove,sync
+SOPERATIONS=hVCIQRS
 
 PARSEDOPTS=$(getopt --options=$SOPERATIONS --longoptions=$LOPERATIONS --name $(basename "$0") -- "$@") || exit
 eval set -- "$PARSEDOPTS"
@@ -33,6 +33,7 @@ refresh=false
 while true; do
     case "$1" in
         -V|--version) operation='V'; let operationcount++ ;;
+        -C|--clone) operation='C'; let operationcount++ ;;
         -I|--install) operation='I'; let operationcount++ ;;
         -Q|--query) operation='Q'; let operationcount++ ;;
         -R|--remove) operation='R'; let operationcount++ ;;

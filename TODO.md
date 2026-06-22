@@ -9,6 +9,8 @@
 - Allow adding files to download to list
     - Allow printing that list
 - Files can be added as explicit or as a dependency, both by user
+- Files can be added w/ {-U --upgrade} for use with makepkg & stuff
+    - Will need to be noted in pkglist so they can be manually added later
 
 - By default, downloading one package will not download the whole list -- a flag needs to be explicitly set for that
 

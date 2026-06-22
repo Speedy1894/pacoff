@@ -17,7 +17,8 @@ usage:  pacoff <operation> [...]
 operations:
     pacoff {-h --help}
     pacoff {-V --version}
-    pacoff {-I --install} <options>
+    pacoff {-C --clone}   [options]
+    pacoff {-I --install} [options]
     pacoff {-Q --query}   [options] [package(s)]
     pacoff {-R --remove}  [options] <package(s)>
     pacoff {-S --sync}    [options] [pacakge(s)]
@@ -49,10 +50,11 @@ EOF
     
     # Combined help messages w/ shared lines
     case "$1" in
-        I) echo 'usage:  pacoff {-I --install} <options>' ;;
-        Q) echo 'usage:  pacoff {-Q --query} <options>' ;;
-        R) echo 'usage:  pacoff {-R --remove} <options>' ;;
-        S) echo 'usage:  pacoff {-S --sync} <options>' ;;
+        I) echo 'usage:  pacoff {-C --clone} [options]' ;;
+        I) echo 'usage:  pacoff {-I --install} [options]' ;;
+        Q) echo 'usage:  pacoff {-Q --query} [options] [package(s)]' ;;
+        R) echo 'usage:  pacoff {-R --remove} <options> <package(s)>' ;;
+        S) echo 'usage:  pacoff {-S --sync} <options> [package(s)]' ;;
         *) print_log W 'Help message not implemented'; return 1 ;;
     esac
     echo 'options:'
@@ -65,7 +67,7 @@ EOF
     soptionlist+=('-l, --location <path> set an alternate pacoff directory')
     loptionlist+=('--color <when>   colorize the output')
     
-    if [[ "$1" = I ]]; then
+    if [[ "$1" = [CI] ]]; then
         soptionlist+=('-b, --dbpath <path>   set an alternate pacman database location')
         loptionlist+=('--cachedir <dir>  set an alternate pacman package cache location')
         loptionlist+=('--gpgdir <dir>    set an alternate home directory for pacman'\''s GnuPG keys')

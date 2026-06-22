@@ -1,3 +1,20 @@
 #!/usr/bin/bash
 
-# This file is for all functions related to clone operation (first step)
+clone_database () {
+    # Copy the pacman database to the pacoff directory.
+    #
+    # The caller should have already chdir-ed into the pacoff
+    # directory. This functon will not clobber any existing files, so
+    # those must be removed beforehand.
+    #
+    # $1 -- Location of the pacman database (e.g., '/var/lib/pacman')
+    #
+    # ret 1 -- Database already exists
+    # ret 2 -- Pacman database is locked
+    if [[ -e 'db' ]]; then
+        return 1
+    fi
+    if [[ -e "$1/db.lck" ]]; then
+        return 2
+    fi
+    }

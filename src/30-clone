@@ -9,10 +9,8 @@ clone_database () {
     #
     # $1 -- Location of the pacman database (e.g., '/var/lib/pacman')
     # $2 -- (bool) Whether 'file' (-F) dbs should be copied
-    #
-    # ret 1 -- Database already exists
     [[ -e 'db' ]] &&
-        return 1
+        return $ERR_CLONE_EXISTS
     
     mkdir -- 'db'
     
@@ -35,10 +33,8 @@ clone_keyring () {
     # those must be removed beforehand.
     #
     # $1 -- Location of the pacman keyring (e.g., '/etc/pacman.d/gnupg')
-    #
-    # ret 1 -- Keyring already exists
     [[ -e 'gnupg' ]] &&
-        return 1
+        return $ERR_CLONE_EXISTS
     
     mkdir -- 'gnupg'
     cp -- $(find "$1" -maxdepth 1 -type f -perm -0444) 'gnupg'
@@ -46,3 +42,6 @@ clone_keyring () {
     return 0
 }
 #TODO: create pkglist, copy pacman.conf
+
+# Errors #
+declare -r ERR_CLONE_EXISTS=1

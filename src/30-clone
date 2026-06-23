@@ -41,6 +41,18 @@ clone_keyring () {
     
     return 0
 }
+
+
+clone_operation () {
+    # Create a new pacoff directory using pacman's data.
+    #
+    # $1 -- New directory in which to store pacoff's data
+    # $2 -- Location of the pacman database (e.g., '/var/lib/pacman')
+    # $3 -- Location of the pacman keyring (e.g., '/etc/pacman.d/gnupg')
+    # $4 -- (bool) Whether 'file' (-F) dbs should be copied
+    echo ''
+}
+
 #TODO: create pkglist, copy pacman.conf
 
 # Errors #

@@ -1,9 +1,7 @@
 # To-Do List
 
 ## DB Cloning
-- Copy package databases from offline system
-- Needs to also get pacman.conf & gpgdir from original device, since it may have different repos
-    - Need to fetch mirrorlist and edit pacman.conf on each {-S --sync} invocation to point to it
+:)
 
 
 ## Package Fetching

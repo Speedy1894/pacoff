@@ -50,10 +50,27 @@ clone_operation () {
     # $2 -- Location of the pacman database (e.g., '/var/lib/pacman')
     # $3 -- Location of the pacman keyring (e.g., '/etc/pacman.d/gnupg')
     # $4 -- (bool) Whether 'file' (-F) dbs should be copied
-    echo ''
+    [[ -e "$1" ]] &&
+        return $ERR_CLONE_EXISTS
+    
+    mkdir -- "$1"
+    cd -- "$1"
+    
+    pacoff --version > 'pacoff-dir'
+    mkdir -- 'cache'
+    touch -- 'pkglist'
+    touch -- 'pacman.log'
+    cp -- '/etc/pacman.conf' 'pacman.conf'
+    
+    [[ -f '/etc/pacman.d/mirrorlist' ]] &&
+        cp -- '/etc/pacman.d/mirrorlist' 'mirrorlist'
+    
+    clone_database "$2" "$4"
+    clone_keyring "$3"
+    
+    return 0
 }
 
-#TODO: create pkglist, copy pacman.conf
 
 # Errors #
 declare -r ERR_CLONE_EXISTS=1

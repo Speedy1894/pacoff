@@ -50,7 +50,7 @@ EOF
     
     # Combined help messages w/ shared lines
     case "$1" in
-        I) echo 'usage:  pacoff {-C --clone} [options]' ;;
+        C) echo 'usage:  pacoff {-C --clone} [options]' ;;
         I) echo 'usage:  pacoff {-I --install} [options]' ;;
         Q) echo 'usage:  pacoff {-Q --query} [options] [package(s)]' ;;
         R) echo 'usage:  pacoff {-R --remove} <options> <package(s)>' ;;

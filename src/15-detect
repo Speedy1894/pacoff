@@ -1,0 +1,37 @@
+#!/usr/bin/bash
+
+get_state_dir () {
+    # Output the directory which contains the pacoff state.
+    #
+    # A pacoff directory is one which contains 'pacoff' in its name and
+    # contains a file named 'pacoff-dir'. The current directory is
+    # checked first, followed by all which are children of the current
+    # working directory. If multiple candidates are found via the second
+    # method, then none will be selected.
+    if [[ -f 'pacoff-dir' ]]; then
+        echo '.'
+        return 0
+    fi
+    
+    declare -i dircount=0
+    declare result
+    while read -r dir; do
+        if [[ -f "${dir}/pacoff-dir" ]]; then
+            let dircount++
+            result="$dir"
+        fi
+    done <<< "$(find . -name '*pacoff*' -type d -printf '%f\n')"
+    
+    [[ $dircount -eq 0 ]] &&
+        return $ERR_DETECT_NOTFOUND
+    [[ $dircount -gt 1 ]] &&
+        return $ERR_DETECT_AMBIGUOUS
+    
+    echo "$result"
+    return 0
+}
+
+
+# Errors #
+declare -r ERR_DETECT_NOTFOUND=1
+declare -r ERR_DETECT_AMBIGUOUS=2

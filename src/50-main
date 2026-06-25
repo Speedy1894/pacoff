@@ -66,8 +66,8 @@ main () {
 }
 
 
-# Run main() if running as a script (return in an un-sourced file gives nonzero exit status)
-(return 0 2>/dev/null) ||
+# Run main() if running as a script
+[[ "$(basename "$0")" = 'pacoff' ]] &&
     main "$@"
 
 

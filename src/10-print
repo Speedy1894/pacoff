@@ -3,7 +3,7 @@
 print_log () {
     case "$1" in
         D) [[ -n "$PACOFF_DEBUG" ]] &&
-               echo -e "[\x1b[35mDEBUG\x1b[39m] $2" >&2 ;;
+               echo -e "[\x1b[36mDEBUG\x1b[39m] $2" >&2 ;;
         E) echo -e "[\x1b[31mERROR\x1b[39m] $2" >&2 ;;
         W) echo -e "[\x1b[33mWARN\x1b[39m] $2" >&2 ;;
         I) echo -e "[\x1b[32mINFO\x1b[39m] $2" >&2 ;;

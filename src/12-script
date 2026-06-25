@@ -1,0 +1,13 @@
+#!/bin/bash
+
+exit () {
+    # Exit only if running as a script
+    errcode=$?
+    [[ -n "$1" ]] &&
+        errcode="$1"
+    
+    [[ "$(basename "$0")" = 'pacoff' ]] &&
+        builtin exit $errcode
+    
+    print_log I 'Would have exited with error code '"'$errcode'"
+}

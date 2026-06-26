@@ -9,17 +9,17 @@ clone_database () {
     #
     # $1 -- Location of the pacman database (e.g., '/var/lib/pacman')
     # $2 -- (bool) Whether 'file' (-F) dbs should be copied
-    [[ -e 'db' ]] &&
+    [[ -e "$PACOFF_STATE_DB" ]] &&
         return $EX_EXISTS
     
-    mkdir -- 'db'
+    mkdir -- "$PACOFF_STATE_DB"
     
-    cp -R -- "$1/local" 'db/local'
+    cp -R -- "$1/local" "$PACOFF_STATE_DB/local"
     
-    mkdir -- 'db/sync'
-    cp -- $(find "$1/sync" -maxdepth 1 -type f -name '*.db') 'db/sync/'
+    mkdir -- "$PACOFF_STATE_DB/sync"
+    cp -- $(find "$1/sync" -maxdepth 1 -type f -name '*.db') "$PACOFF_STATE_DB/sync/"
     [[ "$2" = true ]] &&
-        cp -- $(find "$1/sync" -maxdepth 1 -type f -name '*.files') 'db/sync/'
+        cp -- $(find "$1/sync" -maxdepth 1 -type f -name '*.files') "$PACOFF_STATE_DB/sync/"
     
     return 0
 }
@@ -33,11 +33,11 @@ clone_keyring () {
     # those must be removed beforehand.
     #
     # $1 -- Location of the pacman keyring (e.g., '/etc/pacman.d/gnupg')
-    [[ -e 'gnupg' ]] &&
+    [[ -e "$PACOFF_STATE_KEYRING" ]] &&
         return $EX_EXISTS
     
-    mkdir -- 'gnupg'
-    cp -- $(find "$1" -maxdepth 1 -type f -perm -0444) 'gnupg'
+    mkdir -- "$PACOFF_STATE_KEYRING"
+    cp -- $(find "$1" -maxdepth 1 -type f -perm -0444) "$PACOFF_STATE_KEYRING/"
     
     return 0
 }
@@ -56,14 +56,15 @@ clone_operation () {
     mkdir -- "$1"
     cd -- "$1"
     
-    pacoff --version > 'pacoff-dir'
-    mkdir -- 'cache'
-    touch -- 'pkglist'
-    touch -- 'pacman.log'
-    cp -- '/etc/pacman.conf' 'pacman.conf'
+    pacoff --version > "$PACOFF_STATE_ID"
+    mkdir -- "$PACOFF_STATE_CACHE"
+    touch -- "$PACOFF_STATE_PKGLIST"
+    touch -- "$PACOFF_STATE_PACMANLOG"
+    touch -- "$PACOFF_STATE_SELFLOG"
+    cp -- "$PACOFF_PACMAN_PACMANCONF" "$PACOFF_STATE_PACMANCONF"
     
-    [[ -f '/etc/pacman.d/mirrorlist' ]] &&
-        cp -- '/etc/pacman.d/mirrorlist' 'mirrorlist'
+    [[ -f "$PACOFF_PACMAN_MIRRORLIST" ]] &&
+        cp -- "$PACOFF_PACMAN_MIRRORLIST" "$PACOFF_STATE_MIRRORLIST"
     
     clone_database "$2" "$4"
     clone_keyring "$3"

@@ -1,0 +1,20 @@
+#!/usr/bin/bash
+
+# Pacman default locations
+declare -gr PACOFF_PACMAN_DB='/var/lib/pacman'
+declare -gr PACOFF_PACMAN_CACHE='/var/cache/pacman/pkg'
+declare -gr PACOFF_PACMAN_KEYRING='/etc/pacman.d/gnupg'
+declare -gr PACOFF_PACMAN_PACMANLOG='/var/log/pacman.log'
+declare -gr PACOFF_PACMAN_PACMANCONF='/etc/pacman.conf'
+declare -gr PACOFF_PACMAN_MIRRORLIST='/etc/pacman.d/mirrorlist'
+
+# Pacoff state dir
+declare -gr PACOFF_STATE_DB='db'
+declare -gr PACOFF_STATE_CACHE='cache'
+declare -gr PACOFF_STATE_KEYRING='gnupg'
+declare -gr PACOFF_STATE_ID='pacoff-dir'
+declare -gr PACOFF_STATE_PKGLIST='pkglist'
+declare -gr PACOFF_STATE_PACMANLOG='pacman.log'
+declare -gr PACOFF_STATE_SELFLOG='pacoff.log'
+declare -gr PACOFF_STATE_PACMANCONF='pacman.conf'
+declare -gr PACOFF_STATE_MIRRORLIST='mirrorlist'

@@ -2,3 +2,30 @@
 ## Pacoff -- Keeping Offline Systems Up-to-Date
 ## ===================================================================
 
+## == DESCRIPTION ====================================================
+##
+## Pacoff is a wrapper for Pacman -- the Arch Linux package
+## manager -- to allow downloading packages to offline systems. Its
+## state directory contains all of the files necessary for this
+## process between any two machines that use Pacman, even if they
+## use different repositories.
+##
+## Invoking pacoff involves specifying an operation with any
+## potential options and targets to operate on. A target is usually
+## a package name, file name, URL, or a search string. Targets can
+## be provided as command line arguments.
+##
+
+## == EXIT CODE ======================================================
+##
+##   0 -- Success
+##   1 -- Miscellaneous error
+##  64 -- Incorrect command-line usage
+##  77 -- Inadequate permissions
+##  79 -- Specified filesystem object doesn't exist
+##  80 -- Output destination already exists
+##  81 -- Multiple possibilities exist; must manually specify
+##
+
+## ===================================================================
+

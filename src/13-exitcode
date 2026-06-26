@@ -7,4 +7,4 @@ declare -rg EX_USAGE=64  # Incorrect usage in command line
 declare -rg EX_NOPERM=77  # Permission denied
 declare -rg EX_NOTFOUND=79  # Specified filesystem object doesn't exist
 declare -rg EX_EXISTS=80  # Output destination already exists
-declare -rg EX_AMBIGUOUS=81  # Multiple possibilities exist; manually specify
+declare -rg EX_AMBIGUOUS=81  # Multiple possibilities exist; must manually specify

@@ -1,0 +1,18 @@
+## == USAGE ==========================================================
+##
+## Usage information will be included here at a later date.
+##
+
+## == EXIT CODE ======================================================
+##
+##   0 -- Success
+##   1 -- Miscellaneous error
+##  64 -- Incorrect command-line usage
+##  77 -- Inadequate permissions
+##  79 -- Specified filesystem object doesn't exist
+##  80 -- Output destination already exists
+##  81 -- Multiple possibilities exist; must manually specify
+##
+
+## ===================================================================
+

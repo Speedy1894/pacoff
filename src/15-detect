@@ -23,15 +23,10 @@ get_state_dir () {
     done <<< "$(find . -name '*pacoff*' -type d -printf '%f\n')"
     
     [[ $dircount -eq 0 ]] &&
-        return $ERR_DETECT_NOTFOUND
+        return $EX_NOTFOUND
     [[ $dircount -gt 1 ]] &&
-        return $ERR_DETECT_AMBIGUOUS
+        return $EX_AMBIGUOUS
     
     echo "$result"
     return 0
 }
-
-
-# Errors #
-declare -r ERR_DETECT_NOTFOUND=1
-declare -r ERR_DETECT_AMBIGUOUS=2

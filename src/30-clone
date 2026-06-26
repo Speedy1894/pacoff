@@ -10,7 +10,7 @@ clone_database () {
     # $1 -- Location of the pacman database (e.g., '/var/lib/pacman')
     # $2 -- (bool) Whether 'file' (-F) dbs should be copied
     [[ -e 'db' ]] &&
-        return $ERR_CLONE_EXISTS
+        return $EX_EXISTS
     
     mkdir -- 'db'
     
@@ -34,7 +34,7 @@ clone_keyring () {
     #
     # $1 -- Location of the pacman keyring (e.g., '/etc/pacman.d/gnupg')
     [[ -e 'gnupg' ]] &&
-        return $ERR_CLONE_EXISTS
+        return $EX_EXISTS
     
     mkdir -- 'gnupg'
     cp -- $(find "$1" -maxdepth 1 -type f -perm -0444) 'gnupg'
@@ -51,7 +51,7 @@ clone_operation () {
     # $3 -- Location of the pacman keyring (e.g., '/etc/pacman.d/gnupg')
     # $4 -- (bool) Whether 'file' (-F) dbs should be copied
     [[ -e "$1" ]] &&
-        return $ERR_CLONE_EXISTS
+        return $EX_EXISTS
     
     mkdir -- "$1"
     cd -- "$1"
@@ -70,7 +70,3 @@ clone_operation () {
     
     return 0
 }
-
-
-# Errors #
-declare -r ERR_CLONE_EXISTS=1

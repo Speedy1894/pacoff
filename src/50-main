@@ -9,11 +9,10 @@ main () {
     fi
     
     
-    LOPERATIONS=help,version,clone,install,query,remove,sync
-    SOPERATIONS=hVCIQRS
+    loperations=help,version,clone,install,query,remove,sync
+    soperations=hVCIQRS
     
-    PARSEDOPTS=$(getopt --options=$SOPERATIONS --longoptions=$LOPERATIONS --name $(basename "$0") -- "$@") || exit
-    eval set -- "$PARSEDOPTS"
+    eval set -- "$(getopt --options=$SOPERATIONS --longoptions=$LOPERATIONS --name $(basename "$0") -- "$@")"
     
     
     #TODO: default options need to change based on operation
@@ -72,8 +71,8 @@ main () {
 
 
 # following two lines should be parsed after operation is determined
-# LOPTIONS=
-# SOPTIONS=
+# loptions=
+# soptions=
 
 
 # flow for cmdline arg parsing:

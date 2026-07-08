@@ -23,9 +23,9 @@ get_state_dir () {
     done <<< "$(find . -name '*pacoff*' -type d -printf '%f\n')"
     
     [[ $dircount -eq 0 ]] &&
-        return $EX_NOTFOUND
+        return $EX_notfound
     [[ $dircount -gt 1 ]] &&
-        return $EX_AMBIGUOUS
+        return $EX_ambiguous
     
     echo "$result"
     return 0

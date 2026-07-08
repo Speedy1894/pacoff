@@ -1,10 +1,10 @@
 #!/usr/bin/bash
 
 # Somewhat based on /usr/include/sysexits.h
-declare -rg EX_OK=0  # Successful termination
-declare -rg EX_MISC=1  # Miscellaneous error
-declare -rg EX_USAGE=64  # Incorrect usage in command line
-declare -rg EX_NOPERM=77  # Permission denied
-declare -rg EX_NOTFOUND=79  # Specified filesystem object doesn't exist
-declare -rg EX_EXISTS=80  # Output destination already exists
-declare -rg EX_AMBIGUOUS=81  # Multiple possibilities exist; must manually specify
+declare -rg EX_ok=0  # Successful termination
+declare -rg EX_misc=1  # Miscellaneous error
+declare -rg EX_usage=64  # Incorrect usage in command line
+declare -rg EX_noperm=77  # Permission denied
+declare -rg EX_notfound=79  # Specified filesystem object doesn't exist
+declare -rg EX_exists=80  # Output destination already exists
+declare -rg EX_ambiguous=81  # Multiple possibilities exist; must manually specify

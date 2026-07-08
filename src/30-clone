@@ -9,17 +9,17 @@ clone_database () {
     #
     # $1 -- Location of the pacman database (e.g., '/var/lib/pacman')
     # $2 -- (bool) Whether 'file' (-F) dbs should be copied
-    [[ -e "$PACOFF_STATE_DB" ]] &&
-        return $EX_EXISTS
+    [[ -e "$GL_state_db" ]] &&
+        return $EX_exists
     
-    mkdir -- "$PACOFF_STATE_DB"
+    mkdir -- "$GL_state_db"
     
-    cp -R -- "$1/local" "$PACOFF_STATE_DB/local"
+    cp -R -- "$1/local" "$GL_state_db/local"
     
-    mkdir -- "$PACOFF_STATE_DB/sync"
-    cp -- $(find "$1/sync" -maxdepth 1 -type f -name '*.db') "$PACOFF_STATE_DB/sync/"
+    mkdir -- "$GL_state_db/sync"
+    cp -- $(find "$1/sync" -maxdepth 1 -type f -name '*.db') "$GL_state_db/sync/"
     [[ "$2" = true ]] &&
-        cp -- $(find "$1/sync" -maxdepth 1 -type f -name '*.files') "$PACOFF_STATE_DB/sync/"
+        cp -- $(find "$1/sync" -maxdepth 1 -type f -name '*.files') "$GL_state_db/sync/"
     
     return 0
 }
@@ -33,11 +33,11 @@ clone_keyring () {
     # those must be removed beforehand.
     #
     # $1 -- Location of the pacman keyring (e.g., '/etc/pacman.d/gnupg')
-    [[ -e "$PACOFF_STATE_KEYRING" ]] &&
-        return $EX_EXISTS
+    [[ -e "$GL_state_keyring" ]] &&
+        return $EX_exists
     
-    mkdir -- "$PACOFF_STATE_KEYRING"
-    cp -- $(find "$1" -maxdepth 1 -type f -perm -0444) "$PACOFF_STATE_KEYRING/"
+    mkdir -- "$GL_state_keyring"
+    cp -- $(find "$1" -maxdepth 1 -type f -perm -0444) "$GL_state_keyring/"
     
     return 0
 }
@@ -51,20 +51,20 @@ clone_operation () {
     # $3 -- Location of the pacman keyring (e.g., '/etc/pacman.d/gnupg')
     # $4 -- (bool) Whether 'file' (-F) dbs should be copied
     [[ -e "$1" ]] &&
-        return $EX_EXISTS
+        return $EX_exists
     
     mkdir -- "$1"
     cd -- "$1"
     
-    pacoff --version > "$PACOFF_STATE_ID"
-    mkdir -- "$PACOFF_STATE_CACHE"
-    touch -- "$PACOFF_STATE_PKGLIST"
-    touch -- "$PACOFF_STATE_PACMANLOG"
-    touch -- "$PACOFF_STATE_SELFLOG"
-    cp -- "$PACOFF_PACMAN_PACMANCONF" "$PACOFF_STATE_PACMANCONF"
+    pacoff --version > "$GL_state_id"
+    mkdir -- "$GL_state_cache"
+    touch -- "$GL_state_pkglist"
+    touch -- "$GL_state_pacmanlog"
+    touch -- "$GL_state_selflog"
+    cp -- "$GL_pacman_pacmanconf" "$GL_state_pacmanconf"
     
-    [[ -f "$PACOFF_PACMAN_MIRRORLIST" ]] &&
-        cp -- "$PACOFF_PACMAN_MIRRORLIST" "$PACOFF_STATE_MIRRORLIST"
+    [[ -f "$GL_pacman_mirrorlist" ]] &&
+        cp -- "$GL_pacman_mirrorlist" "$GL_state_mirrorlist"
     
     clone_database "$2" "$4"
     clone_keyring "$3"

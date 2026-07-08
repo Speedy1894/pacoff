@@ -61,9 +61,8 @@ EOF
     esac
     echo 'options:'
     
-    local soptionlist  # All options will be added here, then sorted
-    local loptionlist  # same but for options with only long format
-    declare -a soptionlist loptionlist
+    declare -a soptionlist loptionlist  # All options will be added here, then sorted;
+                                        # `loptionlist` is for those with only long format
     
     #NOTE: All options should be kept to a maximum of 80 characters (note the leading spaces)
     soptionlist+=('-l, --location <path> set an alternate pacoff directory')

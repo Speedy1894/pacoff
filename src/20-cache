@@ -10,7 +10,6 @@ get_cache_list () {
     # This function only returns the names of the packages themselves!
     # For a true list, the caller must also check for files with '.sig'
     # appended.
-    local wantslist
     declare -a wantslist  # list of wanted packages as obtained from pkglist
     
     while read -r line; do

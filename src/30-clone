@@ -1,48 +1,5 @@
 #!/usr/bin/bash
 
-clone_database () {
-    # Copy the pacman database to the pacoff directory.
-    #
-    # The caller should have already chdir-ed into the pacoff
-    # directory. This functon will not clobber any existing files, so
-    # those must be removed beforehand.
-    #
-    # $1 -- Location of the pacman database (e.g., '/var/lib/pacman')
-    # $2 -- (bool) Whether 'file' (-F) dbs should be copied
-    [[ -e "$GL_state_db" ]] &&
-        return $EX_exists
-    
-    mkdir -- "$GL_state_db"
-    
-    cp -R -- "$1/local" "$GL_state_db/local"
-    
-    mkdir -- "$GL_state_db/sync"
-    cp -- $(find "$1/sync" -maxdepth 1 -type f -name '*.db') "$GL_state_db/sync/"
-    [[ "$2" = true ]] &&
-        cp -- $(find "$1/sync" -maxdepth 1 -type f -name '*.files') "$GL_state_db/sync/"
-    
-    return 0
-}
-
-
-clone_keyring () {
-    # Copy the pacman GPG keys to the pacoff directory.
-    #
-    # The caller should have already chdir-ed into the pacoff
-    # directory. This functon will not clobber any existing files, so
-    # those must be removed beforehand.
-    #
-    # $1 -- Location of the pacman keyring (e.g., '/etc/pacman.d/gnupg')
-    [[ -e "$GL_state_keyring" ]] &&
-        return $EX_exists
-    
-    mkdir -- "$GL_state_keyring"
-    cp -- $(find "$1" -maxdepth 1 -type f -perm -0444) "$GL_state_keyring/"
-    
-    return 0
-}
-
-
 clone_operation () {
     # Create a new pacoff directory using pacman's data.
     #
@@ -53,9 +10,10 @@ clone_operation () {
     [[ -e "$1" ]] &&
         return $EX_exists
     
-    mkdir -- "$1"
+    mkdir -p -- "$1"
     cd -- "$1"
     
+    # Create miscellaneous files
     pacoff --version > "$GL_state_id"
     mkdir -- "$GL_state_cache"
     touch -- "$GL_state_pkglist"
@@ -66,8 +24,18 @@ clone_operation () {
     [[ -f "$GL_pacman_mirrorlist" ]] &&
         cp -- "$GL_pacman_mirrorlist" "$GL_state_mirrorlist"
     
-    clone_database "$2" "$4"
-    clone_keyring "$3"
+    # Clone database
+    mkdir -- "$GL_state_db"
+    cp -R -- "${2}/local" "${GL_state_db}/local"
+    
+    mkdir -- "${GL_state_db}/sync"
+    cp -- $(find "${2}/sync" -maxdepth 1 -type f -name '*.db') "${GL_state_db}/sync/"
+    [[ "$4" = true ]] &&
+        cp -- $(find "${2}/sync" -maxdepth 1 -type f -name '*.files') "${GL_state_db}/sync/"
+    
+    # Clone keyring
+    mkdir -- "$GL_state_keyring"
+    cp -- $(find "$3" -maxdepth 1 -type f -perm -0444) "${GL_state_keyring}/"
     
     return 0
 }

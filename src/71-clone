@@ -14,28 +14,28 @@ clone_operation () {
     cd -- "$1"
     
     # Create miscellaneous files
-    pacoff --version > "$GL_state_id"
-    mkdir -- "$GL_state_cache"
-    touch -- "$GL_state_pkglist"
-    touch -- "$GL_state_pacmanlog"
-    touch -- "$GL_state_selflog"
-    cp -- "$GL_pacman_pacmanconf" "$GL_state_pacmanconf"
+    pacoff --version > "$LC_state_id"
+    mkdir -- "$LC_state_cache"
+    touch -- "$LC_state_pkglist"
+    touch -- "$LC_state_pacmanlog"
+    touch -- "$LC_state_selflog"
+    cp -- "$LC_pacman_pacmanconf" "$LC_state_pacmanconf"
     
-    [[ -f "$GL_pacman_mirrorlist" ]] &&
-        cp -- "$GL_pacman_mirrorlist" "$GL_state_mirrorlist"
+    [[ -f "$LC_pacman_mirrorlist" ]] &&
+        cp -- "$LC_pacman_mirrorlist" "$LC_state_mirrorlist"
     
     # Clone database
-    mkdir -- "$GL_state_db"
-    cp -R -- "${2}/local" "${GL_state_db}/local"
+    mkdir -- "$LC_state_db"
+    cp -R -- "${2}/local" "${LC_state_db}/local"
     
-    mkdir -- "${GL_state_db}/sync"
-    cp -- $(find "${2}/sync" -maxdepth 1 -type f -name '*.db') "${GL_state_db}/sync/"
+    mkdir -- "${LC_state_db}/sync"
+    cp -- $(find "${2}/sync" -maxdepth 1 -type f -name '*.db') "${LC_state_db}/sync/"
     [[ "$4" = true ]] &&
-        cp -- $(find "${2}/sync" -maxdepth 1 -type f -name '*.files') "${GL_state_db}/sync/"
+        cp -- $(find "${2}/sync" -maxdepth 1 -type f -name '*.files') "${LC_state_db}/sync/"
     
     # Clone keyring
-    mkdir -- "$GL_state_keyring"
-    cp -- $(find "$3" -maxdepth 1 -type f -perm -0444) "${GL_state_keyring}/"
+    mkdir -- "$LC_state_keyring"
+    cp -- $(find "$3" -maxdepth 1 -type f -perm -0444) "${LC_state_keyring}/"
     
     return 0
 }

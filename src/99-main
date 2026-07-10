@@ -52,8 +52,8 @@ main () {
     fi
     
     # display help message, if applicable
-    if [[ $help = true ]] || [[ "$operation" = 'V' ]]; then
-        display_help $operation
+    if [[ "$help" = true ]] || [[ "$operation" = 'V' ]]; then
+        display_help "$operation"
         exit 0
     fi
     

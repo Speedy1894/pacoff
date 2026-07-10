@@ -26,6 +26,7 @@ operations:
     pacoff {-h --help}
     pacoff {-V --version}
     pacoff {-C --clone}   [options]
+    pacoff {-F --files}   [options] [file(s)]
     pacoff {-I --install} [options]
     pacoff {-Q --query}   [options] [package(s)]
     pacoff {-R --remove}  [options] <package(s)>
@@ -59,6 +60,7 @@ EOF
     # Combined help messages w/ shared lines
     case "$1" in
         C) echo 'usage:  pacoff {-C --clone} [options]' ;;
+        F) echo 'usage:  pacoff {-F --files} [options] [file(s)]' ;;v
         I) echo 'usage:  pacoff {-I --install} [options]' ;;
         Q) echo 'usage:  pacoff {-Q --query} [options] [package(s)]' ;;
         R) echo 'usage:  pacoff {-R --remove} <options> <package(s)>' ;;

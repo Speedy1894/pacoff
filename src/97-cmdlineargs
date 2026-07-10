@@ -1,0 +1,72 @@
+#!/usr/bin/bash
+
+get_cmdline_options () {
+    # Return short and long options suitable for a certain operation.
+    #
+    # The returned options are suitable for `getopt` -- that means a
+    # ':' suffix indicates a required argument, and '::' indicates an
+    # optional argument. The short options are echoed, followed by a
+    # newline and the string of long options.
+    #
+    # If no parameter is given, then all possible options are echoed.
+    #
+    # $1 -- Short version of the operation's flag
+    
+}
+
+
+parse_cmdline_args () {
+    # Return an associative array of command-line arguments.
+    #
+    # This function will use the correct program based on what is
+    # present on the user's system and return the name of an
+    # associative array. The keys of this array correspond to the long
+    # version of each option. For flags, the value will be the number
+    # of times it was passed. For options, the value will be the name
+    # of an array of all passed values (this is needed in case it was
+    # passed multiple times). However, if the option was never given a
+    # value by the user, its value in the primary array will be empty
+    # and no secondary array will be created.
+    #
+    # There are two special keys: the hyphen (-) and its double
+    # counterpart (--). The values for these keys are the selected
+    # operation's short and long name, respectively. If no operation
+    # was specified, then these values will be empty.
+    #
+    # $@ -- Arguments as from the command line
+    getopt --test &>/dev/null
+    if [[ $? -ne 4 ]]; then
+        print_log E '`getopt --test` failed in this environment. This script cannot run.'
+        exit 1
+    fi
+    
+    
+    loperations=version,clone,install,files,query,remove,sync
+    soperations=VCIFQRS
+    
+    eval set -- "$(getopt --options=$SOPERATIONS --longoptions=$LOPERATIONS --name $(basename "$0") -- "$@")"
+    
+    
+    operationcount=0
+    operation=''
+    
+    # Look for operation
+    while true; do
+        case "$1" in
+            -V|--version) operation='V'; let operationcount++ ;;
+            -C|--clone) operation='C'; let operationcount++ ;;
+            -I|--install) operation='I'; let operationcount++ ;;
+            -Q|--query) operation='Q'; let operationcount++ ;;
+            -R|--remove) operation='R'; let operationcount++ ;;
+            -S|--sync) operation='S'; let operationcount++ ;;
+            --) break ;;
+            *) ;;
+        esac
+        shift
+    done
+    
+    if [[ $operationcount -gt 1 ]]; then
+        print_log E 'only one operation may be used at a time'
+        exit 1
+    fi
+}

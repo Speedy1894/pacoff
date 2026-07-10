@@ -45,28 +45,30 @@ parse_cmdline_args () {
     fi
     
     declare -n out="$1"  # Associative array for output
+    declare -a cmdlineopts=("${@:1}")  # Original command-line options
     out[-]=''
-    shift
     
     # Separate potential options
     sopts="${ get_cmdline_options '-';}"
     lopts="${sopts#* }"
     sopts="${sopts% *}"
     
-    eval set -- "${ getopt --unknown --shell=bash --options=$sopts --longoptions=$lopts --name 'pacoff' -- "$@";}"
+    eval set -- "${ getopt --shell=bash --options="$sopts" --longoptions="$lopts" --name='pacoff' -- "${cmdlineopts[@]}";}"
     
     declare -i operationcnt=0
     
     # Look for operation
     for arg in "$@"; do
         case "$arg" in
-            -V|--version) out[-]='V'; operationcnt+=1 ;;
-            -C|--clone)   out[-]='C'; operationcnt+=1 ;;
-            -F|--files)   out[-]='F'; operationcnt+=1 ;;
-            -I|--install) out[-]='I'; operationcnt+=1 ;;
-            -Q|--query)   out[-]='Q'; operationcnt+=1 ;;
-            -R|--remove)  out[-]='R'; operationcnt+=1 ;;
-            -S|--sync)    out[-]='S'; operationcnt+=1 ;;
+            -V|--version) [ "${out[-]}" != 'V' ] &&  # Be like pacman
+                              operationcnt+=1
+                                           out[-]='V' ;;
+            -C|--clone)   operationcnt+=1; out[-]='C' ;;
+            -F|--files)   operationcnt+=1; out[-]='F' ;;
+            -I|--install) operationcnt+=1; out[-]='I' ;;
+            -Q|--query)   operationcnt+=1; out[-]='Q' ;;
+            -R|--remove)  operationcnt+=1; out[-]='R' ;;
+            -S|--sync)    operationcnt+=1; out[-]='S' ;;
             --) break ;;
             *) ;;
         esac
@@ -91,4 +93,6 @@ parse_cmdline_args () {
     sopts="${ get_cmdline_options "${out[-]}";}"
     lopts="${sopts#* }"
     sopts="${sopts% *}"
+    
+    
 }

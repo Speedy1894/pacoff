@@ -6,12 +6,12 @@ get_cmdline_options () {
     # The returned options are suitable for `getopt` -- that means a
     # ':' suffix indicates a required argument, and '::' indicates an
     # optional argument. The short options are echoed, followed by a
-    # newline and the string of long options.
+    # space ( ) and the string of long options.
     #
     # If no parameter is given, then all possible options are echoed.
     #
     # $1 -- Short version of the operation's flag
-    
+    :
 }
 
 
@@ -40,15 +40,16 @@ parse_cmdline_args () {
         exit 1
     fi
     
+    # Separate potential options
+    sopts="${ get_cmdline_options '';}"
+    lopts=$"${sopts#* }"
+    sopts=$"${sopts% *}"
     
-    loperations=version,clone,install,files,query,remove,sync
-    soperations=VCIFQRS
+    eval set -- "${ getopt --unknown --shell bash --options=$sopts --longoptions=$lopts --name 'pacoff' -- "$@";}"
     
-    eval set -- "$(getopt --options=$SOPERATIONS --longoptions=$LOPERATIONS --name $(basename "$0") -- "$@")"
-    
-    
+    #TODO: generate a name for the option array -- I think it's best to make it random given that this function can be invoked multiple times within an environment.
     operationcount=0
-    operation=''
+    operation=''  #TODO: Just put the short operation directly into the option array
     
     # Look for operation
     while true; do
@@ -64,6 +65,7 @@ parse_cmdline_args () {
         esac
         shift
     done
+    #TODO: right here, add the long operation's name to the array if an operation was selected
     
     if [[ $operationcount -gt 1 ]]; then
         print_log E 'only one operation may be used at a time'

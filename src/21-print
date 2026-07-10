@@ -1,6 +1,10 @@
 #!/usr/bin/bash
 
 print_log () {
+    # Print a log message to stderr with a certain tag.
+    #
+    # $1 -- [DEWI] First letter of the tag for the message
+    # $2 -- the log message
     case "$1" in
         D) [[ -n "$PACOFF_DEBUG" ]] &&
                echo -e "[\x1b[36mDEBUG\x1b[39m] $2" >&2 ;;
@@ -12,7 +16,9 @@ print_log () {
 
 
 display_help () {
-    # Start with standalone help messages
+    # Display a help message (general or operation-specific)
+    #
+    # $1 -- Short version of the operation's flag (empty for general help)
     if [[ -z "$1" ]]; then  # Print generic help
         cat <<'EOF'
 usage:  pacoff <operation> [...]

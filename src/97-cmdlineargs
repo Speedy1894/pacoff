@@ -8,7 +8,9 @@ get_cmdline_options () {
     # optional argument. The short options are echoed, followed by a
     # space ( ) and the string of long options.
     #
-    # If no parameter is given, then all possible options are echoed.
+    # If the parameter equals "-", then all possible options are
+    # echoed. If it's empty, then only the universal options are
+    # echoed.
     #
     # $1 -- Short version of the operation's flag
     :
@@ -43,12 +45,13 @@ parse_cmdline_args () {
     fi
     
     declare -n out="$1"  # Associative array for output
+    out[-]=''
     shift
     
     # Separate potential options
-    sopts="${ get_cmdline_options '';}"
-    lopts=$"${sopts#* }"
-    sopts=$"${sopts% *}"
+    sopts="${ get_cmdline_options '-';}"
+    lopts="${sopts#* }"
+    sopts="${sopts% *}"
     
     eval set -- "${ getopt --unknown --shell=bash --options=$sopts --longoptions=$lopts --name 'pacoff' -- "$@";}"
     
@@ -84,4 +87,8 @@ parse_cmdline_args () {
         print_log E 'only one operation may be used at a time'
         exit $EX_usage
     fi
+    
+    sopts="${ get_cmdline_options "${out[-]}";}"
+    lopts="${sopts#* }"
+    sopts="${sopts% *}"
 }

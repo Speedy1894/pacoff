@@ -19,20 +19,22 @@ parse_cmdline_args () {
     # Return an associative array of command-line arguments.
     #
     # This function will use the correct program based on what is
-    # present on the user's system and return the name of an
-    # associative array. The keys of this array correspond to the long
-    # version of each option. For flags, the value will be the number
-    # of times it was passed. For options, the value will be the name
-    # of an array of all passed values (this is needed in case it was
-    # passed multiple times). However, if the option was never given a
-    # value by the user, its value in the primary array will be empty
-    # and no secondary array will be created.
+    # present on the user's system and place its output in the given
+    # associative array (by nameref). The keys of this array
+    # correspond to the long version of each option. For flags, the
+    # value will be the number of times it was passed. For options,
+    # the value will be the name of an array of all passed values
+    # (this is needed in case it was passed multiple times). However,
+    # if the option was never given a value by the user, its value in
+    # the primary array will be empty and no secondary array will be
+    # created.
     #
     # There are two special keys: the hyphen (-) and its double
     # counterpart (--). The values for these keys are the selected
     # operation's short and long name, respectively. If no operation
     # was specified, then these values will be empty.
     #
+    # $1 -- The name of the associative array to output to
     # $@ -- Arguments as from the command line
     getopt --test &>/dev/null
     if [[ $? -ne 4 ]]; then
@@ -40,32 +42,43 @@ parse_cmdline_args () {
         exit $EX_dependency
     fi
     
+    declare -n out="$1"  # Associative array for output
+    shift
+    
     # Separate potential options
     sopts="${ get_cmdline_options '';}"
     lopts=$"${sopts#* }"
     sopts=$"${sopts% *}"
     
-    eval set -- "${ getopt --unknown --shell bash --options=$sopts --longoptions=$lopts --name 'pacoff' -- "$@";}"
+    eval set -- "${ getopt --unknown --shell=bash --options=$sopts --longoptions=$lopts --name 'pacoff' -- "$@";}"
     
-    #TODO: generate a name for the option array -- I think it's best to make it random given that this function can be invoked multiple times within an environment.
-    operationcount=0
-    operation=''  #TODO: Just put the short operation directly into the option array
+    declare -i operationcnt=0
     
     # Look for operation
-    while true; do
-        case "$1" in
-            -V|--version) operation='V'; let operationcount++ ;;
-            -C|--clone) operation='C'; let operationcount++ ;;
-            -I|--install) operation='I'; let operationcount++ ;;
-            -Q|--query) operation='Q'; let operationcount++ ;;
-            -R|--remove) operation='R'; let operationcount++ ;;
-            -S|--sync) operation='S'; let operationcount++ ;;
+    for arg in "$@"; do
+        case "$arg" in
+            -V|--version) out[-]='V'; operationcnt+=1 ;;
+            -C|--clone)   out[-]='C'; operationcnt+=1 ;;
+            -F|--files)   out[-]='F'; operationcnt+=1 ;;
+            -I|--install) out[-]='I'; operationcnt+=1 ;;
+            -Q|--query)   out[-]='Q'; operationcnt+=1 ;;
+            -R|--remove)  out[-]='R'; operationcnt+=1 ;;
+            -S|--sync)    out[-]='S'; operationcnt+=1 ;;
             --) break ;;
             *) ;;
         esac
-        shift
     done
-    #TODO: right here, add the long operation's name to the array if an operation was selected
+    
+    case "${out[-]}" in
+        V) out[--]='version' ;;
+        C) out[--]='clone' ;;
+        F) out[--]='files' ;;
+        I) out[--]='install' ;;
+        Q) out[--]='query' ;;
+        R) out[--]='remove' ;;
+        S) out[--]='sync' ;;
+        '') out[--]='' ;;
+    esac
     
     if [[ $operationcount -gt 1 ]]; then
         print_log E 'only one operation may be used at a time'

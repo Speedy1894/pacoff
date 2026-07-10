@@ -25,6 +25,7 @@
 ##  79 -- Specified filesystem object doesn't exist
 ##  80 -- Output destination already exists
 ##  81 -- Multiple possibilities exist; must manually specify
+##  82 -- A dependency of the script is not present
 ##
 
 ## ===================================================================

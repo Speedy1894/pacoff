@@ -37,7 +37,7 @@ parse_cmdline_args () {
     getopt --test &>/dev/null
     if [[ $? -ne 4 ]]; then
         print_log E '`getopt --test` failed in this environment. This script cannot run.'
-        exit 1
+        exit $EX_dependency
     fi
     
     # Separate potential options
@@ -69,6 +69,6 @@ parse_cmdline_args () {
     
     if [[ $operationcount -gt 1 ]]; then
         print_log E 'only one operation may be used at a time'
-        exit 1
+        exit $EX_usage
     fi
 }

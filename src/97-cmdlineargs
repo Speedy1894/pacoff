@@ -85,5 +85,45 @@ parse_cmdline_args () {
     lopts="${sopts#* }"
     sopts="${sopts% *}"
     
+    eval set -- "${ getopt --shell=bash --options="$sopts" --longoptions="$lopts" --name='pacoff' -- "${cmdlineopts[@]}";}"
     
+    declare -i argpos=1
+    declare arg type
+    while [ "$argpos" -le "$#" ] && [ "${!argpos}" != '--' ]; do
+        arg="${!argpos}"
+        
+        # Map short options to long options
+        if [[ "$arg" =~ ^-[^\-]$ ]]; then
+            if [ -n "${OP_global_short[${arg:1}]}" ]; then
+                arg="${OP_global_short[${arg:1}]}"
+            elif [ -n "${OP_${out[--]}_short[${arg:1}]}" ]; then
+                arg="${OP_${out[--]}_short[${arg:1}]}"
+            else
+                print_log E "Invalid option \"${arg}\""
+                exit $EX_usage
+            fi
+        else
+            arg="${arg:2}"  # remove leading hyphens
+        fi
+        
+        # Get option type and use it
+        if [ -n "${OP_global_type[${arg}]}" ]; then
+            type="${OP_global_type[${arg}]}"
+        else
+            type="${OP_${out[--]}_type[${arg}]}"
+        fi
+        
+        case "$type" in
+            nil) ;;
+            cnt) ((out[$arg]++)) ;;
+            str) out[$arg]="${argpos+1}";
+                 argpos+=1 ;;  # Need to get past the option's argument
+            *) print_log N "Type for \"$arg\" defined as \"$type\""
+               exit $EX_internal ;;
+        esac
+        
+        argpos+=1
+    done
+
+    return 0
 }

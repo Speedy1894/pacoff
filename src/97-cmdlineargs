@@ -45,7 +45,7 @@ parse_cmdline_args () {
     fi
     
     declare -n out="$1"  # Associative array for output
-    declare -a cmdlineopts=("${@:1}")  # Original command-line options
+    declare -a cmdlineopts=("${@:2}")  # Original command-line options
     out[-]=''
     
     # Separate potential options
@@ -74,16 +74,7 @@ parse_cmdline_args () {
         esac
     done
     
-    case "${out[-]}" in
-        V) out[--]='version' ;;
-        C) out[--]='clone' ;;
-        F) out[--]='files' ;;
-        I) out[--]='install' ;;
-        Q) out[--]='query' ;;
-        R) out[--]='remove' ;;
-        S) out[--]='sync' ;;
-        '') out[--]='' ;;
-    esac
+    out[--]="${OP_global_short[${out[-]}]}"
     
     if [[ $operationcount -gt 1 ]]; then
         print_log E 'only one operation may be used at a time'

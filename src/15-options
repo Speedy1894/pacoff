@@ -1,0 +1,47 @@
+#!/usr/bin/bash
+
+#TODO: implement usage information here (maybe in function for speed unless needed);
+#      also, the `type` can be used in the "<argtype>" part of the message
+
+# Types defined in *-cmdlineargs
+
+declare -Agr OP_global_short=([V]=version
+                              [C]=clone
+                              [F]=files
+                              [I]=install
+                              [Q]=query
+                              [R]=remove
+                              [S]=sync
+                              [l]=location)
+declare -Agr OP_global_type=([version]=nil
+                             [clone]=nil
+                             [files]=nil
+                             [install]=nil
+                             [query]=nil
+                             [remove]=nil
+                             [sync]=nil
+                             [debug]=cnt
+                             [color]=str
+                             [location]=str)
+
+declare -Agr OP_clone_short=([b]=dbpath)
+declare -Agr OP_clone_type=([dbpath]=str
+                            [cachedir]=str
+                            [gpgdir]=str)
+
+declare -Agr OP_files_short=()
+declare -Agr OP_files_type=()
+
+declare -Agr OP_install_short=([b]=dbpath)
+declare -Agr OP_install_type=([dbpath]=str
+                              [cachedir]=str
+                              [gpgdir]=str)
+
+declare -Agr OP_query_short=()
+declare -Agr OP_query_type=()
+
+declare -Agr OP_remove_short=([d]=nodeps)
+declare -Agr OP_remove_type=([nodeps]=cnt)
+
+declare -Agr OP_sync_short=([d]=nodeps)
+declare -Agr OP_sync_type=([nodeps]=cnt)

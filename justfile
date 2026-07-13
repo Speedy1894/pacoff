@@ -8,9 +8,9 @@ list:
 
 # Concatenate the files in 'src/' to a single file
 @build outputfile="pacoff":
-    cat - ${ find src/ -type f | sort;} <<<'#!/usr/bin/bash' > '{{outputfile}}'
+    cat - ${ find src/ -type f | sort;} <<<'#!/usr/bin/env python3' > '{{outputfile}}'
     chmod +x '{{outputfile}}'
-    echo "Printed ${ grep -c '' '{{outputfile}}';} lines to '{{outputfile}}'"
+    echo "Printed ${ wc --lines '{{outputfile}}';} lines to '{{outputfile}}'"
 
 # Get the location of all occurences of a string within 'src/'
 @find regexp:

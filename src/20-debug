@@ -1,12 +1,6 @@
-#!/bin/bash
+#!/bin/env python3
 
-exit () {
-    # Print exit status when debugging
-    errcode=$?
-    [[ -n "$1" ]] &&
-        errcode="$1"
-    
-    print_log D "Exit with code $errcode"
-    
-    builtin exit $errcode
-}
+def exit(code=None):
+    """Print exit status when debugging."""
+    print_log("D", "Called exit() with code", code)
+    raise SystemExit(code)

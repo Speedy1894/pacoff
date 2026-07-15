@@ -21,13 +21,13 @@ def _uncaught_except_hook(exceptiontype:type,
         print_log("D", "Uncaught exception:", repr(value))
         sys.__excepthook__(exceptiontype, value, traceback)
     
-    if (exceptiontype == UsageError): sys.exit(64)
-    elif (exceptiontype == PermissionError): sys.exit(77)
-    elif (exceptiontype == FileNotFoundError): sys.exit(79)
-    elif (exceptiontype == FileExistsError): sys.exit(80)
-    elif (exceptiontype == AmbiguityError): sys.exit(81)
-    elif (exceptiontype == KeyboardInterrupt): sys.exit(130)
-    else: sys.exit(1)
+    if (exceptiontype == UsageError): exit(64)
+    elif (exceptiontype == PermissionError): exit(77)
+    elif (exceptiontype == FileNotFoundError): exit(79)
+    elif (exceptiontype == FileExistsError): exit(80)
+    elif (exceptiontype == AmbiguityError): exit(81)
+    elif (exceptiontype == KeyboardInterrupt): exit(130)
+    else: exit(1)
 
 
 sys.excepthook = _uncaught_except_hook

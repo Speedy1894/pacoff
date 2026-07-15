@@ -1,47 +1,67 @@
-#!/usr/bin/bash
+#!/usr/bin/env python3
 
 #TODO: implement usage information here (maybe in function for speed unless needed);
 #      also, the `type` can be used in the "<argtype>" part of the message
 
 # Types defined in *-cmdlineargs
 
-declare -Agr OP_global_short=([V]=version
-                              [C]=clone
-                              [F]=files
-                              [I]=install
-                              [Q]=query
-                              [R]=remove
-                              [S]=sync
-                              [l]=location)
-declare -Agr OP_global_type=([version]=nil
-                             [clone]=nil
-                             [files]=nil
-                             [install]=nil
-                             [query]=nil
-                             [remove]=nil
-                             [sync]=nil
-                             [debug]=cnt
-                             [color]=str
-                             [location]=str)
+OP_global_short:dict = {
+    "V":"version",
+    "C":"clone",
+    "F":"files",
+    "I":"install",
+    "Q":"query",
+    "R":"remove",
+    "S":"sync",
+    "l":"location",
+}
+OP_global_type:dict = {
+    "version":"nil",
+    "clone":"nil",
+    "files":"nil",
+    "install":"nil",
+    "query":"nil",
+    "remove":"nil",
+    "sync":"nil",
+    "debug":"cnt",
+    "color":"str",
+    "location":"str",
+}
 
-declare -Agr OP_clone_short=([b]=dbpath)
-declare -Agr OP_clone_type=([dbpath]=str
-                            [cachedir]=str
-                            [gpgdir]=str)
+OP_clone_short:dict = {
+    "b":"dbpath",
+}
+OP_clone_type:dict = {
+    "dbpath":"str",
+    "cachedir":"str",
+    "gpgdir":"str",
+}
 
-declare -Agr OP_files_short=()
-declare -Agr OP_files_type=()
+OP_files_short:dict = {}
+OP_files_type:dict = {}
 
-declare -Agr OP_install_short=([b]=dbpath)
-declare -Agr OP_install_type=([dbpath]=str
-                              [cachedir]=str
-                              [gpgdir]=str)
+OP_install_short:dict = {
+    "b":"dbpath",
+}
+OP_install_type:dict = {
+    "dbpath":"str",
+    "cachedir":"str",
+    "gpgdir":"str",
+}
 
-declare -Agr OP_query_short=()
-declare -Agr OP_query_type=()
+OP_query_short:dict = {}
+OP_query_type:dict = {}
 
-declare -Agr OP_remove_short=([d]=nodeps)
-declare -Agr OP_remove_type=([nodeps]=cnt)
+OP_remove_short:dict = {
+    "d":"nodeps",
+}
+OP_remove_type:dict = {
+    "nodeps":"cnt",
+}
 
-declare -Agr OP_sync_short=([d]=nodeps)
-declare -Agr OP_sync_type=([nodeps]=cnt)
+OP_sync_short:dict = {
+    "d":"nodeps",
+}
+OP_sync_type:dict = {
+    "nodeps":"cnt",
+}

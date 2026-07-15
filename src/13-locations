@@ -1,20 +1,24 @@
-#!/usr/bin/bash
+#!/usr/bin/env python3
 
 # Pacman default locations
-declare -gr LC_pacman_db='/var/lib/pacman'
-declare -gr LC_pacman_cache='/var/cache/pacman/pkg'
-declare -gr LC_pacman_keyring='/etc/pacman.d/gnupg'
-declare -gr LC_pacman_pacmanlog='/var/log/pacman.log'
-declare -gr LC_pacman_pacmanconf='/etc/pacman.conf'
-declare -gr LC_pacman_mirrorlist='/etc/pacman.d/mirrorlist'
+LC_pacman:dict = {
+    "db":"/var/lib/pacman",
+    "cache":"/var/cache/pacman/pkg",
+    "keyring":"/etc/pacman.d/gnupg",
+    "pacmanlog":"/var/log/pacman.log",
+    "pacmanconf":"/etc/pacman.conf",
+    "mirrorlist":"/etc/pacman.d/mirrorlist"
+}
 
 # Pacoff state dir (relative to dir)
-declare -gr LC_state_db='db'
-declare -gr LC_state_cache='cache'
-declare -gr LC_state_keyring='gnupg'
-declare -gr LC_state_id='pacoff-dir'
-declare -gr LC_state_pkglist='pkglist'
-declare -gr LC_state_pacmanlog='pacman.log'
-declare -gr LC_state_selflog='pacoff.log'
-declare -gr LC_state_pacmanconf='pacman.conf'
-declare -gr LC_state_mirrorlist='mirrorlist'
+LC_state:dict = {
+    "db":"db",
+    "cache":"cache",
+    "keyring":"gnupg",
+    "id":"pacoff-dir",
+    "pkglist":"pkglist",
+    "pacmanlog":"pacman.log",
+    "selflog":"pacoff.log",
+    "pacmanconf":"pacman.conf",
+    "mirrorlist":"mirrorlist"
+}

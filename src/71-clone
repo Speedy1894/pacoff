@@ -1,41 +1,68 @@
-#!/usr/bin/bash
+#!/usr/bin/env python3
 
-clone_operation () {
-    # Create a new pacoff directory using pacman's data.
-    #
-    # $1 -- New directory in which to store pacoff's data
-    # $2 -- Location of the pacman database (e.g., '/var/lib/pacman')
-    # $3 -- Location of the pacman keyring (e.g., '/etc/pacman.d/gnupg')
-    # $4 -- (bool) Whether 'file' (-F) dbs should be copied
-    [[ -e "$1" ]] &&
-        return $EX_exists
+def clone_operation (dest:str,
+                     loc_db:str,
+                     loc_keys:str,
+                     cp_file_db:bool
+                     ) -> None:
+    r"""Create a new pacoff directory using pacman's data.
     
-    mkdir -p -- "$1"
-    cd -- "$1"
+    dest:str: New directory in which to store pacoff's data
+    loc_db:str: Location of the pacman database ('/var/lib/pacman')
+    loc_keys:str: Location of the pacman keyring ('/etc/pacman.d/gnupg')
+    cp_file_db:bool: Whether 'file' (-F) dbs should be copied
+    """
+    if (osp.lexists(dest)): raise FileExistsError
+    
+    os.makedirs(dest)
+    os.chdir(dest)
     
     # Create miscellaneous files
-    pacoff --version > "$LC_state_id"
-    mkdir -- "$LC_state_cache"
-    touch -- "$LC_state_pkglist"
-    touch -- "$LC_state_pacmanlog"
-    touch -- "$LC_state_selflog"
-    cp -- "$LC_pacman_pacmanconf" "$LC_state_pacmanconf"
+    with open(LC_state["id"], "xt") as f:
+        f.write(display_help("V"))  #TODO: give this file useful contents
+    os.mkdir(LC_state["cache"])
+    open(LC_state["pkglist"], "x").close()
+    open(LC_state["pacmanlog"], "x").close()
+    open(LC_state["selflog"], "x").close()
+    shutil.copyfile(LC_pacman["pacmanconf"], LC_state["pacmanconf"])
     
-    [[ -f "$LC_pacman_mirrorlist" ]] &&
-        cp -- "$LC_pacman_mirrorlist" "$LC_state_mirrorlist"
+    if (osp.isfile(LC_pacman["mirrorlist"])):
+        shutil.copy(LC_pacman["mirrorlist"], LC_state["mirrorlist"])
     
     # Clone database
-    mkdir -- "$LC_state_db"
-    cp -R -- "${2}/local" "${LC_state_db}/local"
+    os.mkdir(LC_state["db"])
+    shutil.copytree(osp.join(loc_db, "local"), osp.join(LC_state["db"], "local"))
     
-    mkdir -- "${LC_state_db}/sync"
-    cp -- $(find "${2}/sync" -maxdepth 1 -type f -name '*.db') "${LC_state_db}/sync/"
-    [[ "$4" = true ]] &&
-        cp -- $(find "${2}/sync" -maxdepth 1 -type f -name '*.files') "${LC_state_db}/sync/"
+    os.mkdir(osp.join(LC_state["db"], "sync"))
+    for db in sp.run(("find",
+                      osp.join(loc_db, "sync"),
+                      "-maxdepth","1",
+                      "-type","f",
+                      "-name","*.db",
+                      "-print0"),
+                     capture_output=True,
+                     text=True).stdout.split("\x00"):
+        shutil.copy(db, osp.join(LC_state["db"], "sync"))
+    
+    if (cp_file_db):
+        for db in sp.run(("find",
+                      osp.join(loc_db, "sync"),
+                      "-maxdepth","1",
+                      "-type","f",
+                      "-name","*.files",
+                      "-print0"),
+                     capture_output=True,
+                     text=True).stdout.split("\x00"):
+            shutil.copy(db, osp.join(LC_state["db"], "sync"))
     
     # Clone keyring
-    mkdir -- "$LC_state_keyring"
-    cp -- $(find "$3" -maxdepth 1 -type f -perm -0444) "${LC_state_keyring}/"
-    
-    return 0
-}
+    os.mkdir(LC_state["keyring"])
+    for f in sp.run(("find",
+                      loc_keys,
+                      "-maxdepth","1",
+                      "-type","f",
+                      "-perm","-0444",
+                      "-print0"),
+                     capture_output=True,
+                     text=True).stdout.split("\x00"):
+        shutil.copy(f, LC_state["keyring"])

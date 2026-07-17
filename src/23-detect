@@ -1,32 +1,27 @@
-#!/usr/bin/bash
+#!/usr/bin/env python3
 
-get_state_dir () {
-    # Output the directory which contains the pacoff state.
-    #
-    # A pacoff directory is one which contains 'pacoff' in its name and
-    # contains a file named 'pacoff-dir'. The current directory is
-    # checked first, followed by all which are children of the current
-    # working directory. If multiple candidates are found via the second
-    # method, then none will be selected.
-    if [[ -f 'pacoff-dir' ]]; then
-        echo '.'
-        return 0
-    fi
+def get_state_dir():
+    r"""Output the directory which contains the pacoff state.
     
-    declare -i dircount=0
-    declare result
-    while read -r dir; do
-        if [[ -f "${dir}/pacoff-dir" ]]; then
-            let dircount++
-            result="$dir"
-        fi
-    done <<< "$(find . -name '*pacoff*' -type d -printf '%f\n')"
+    A pacoff directory is one which contains 'pacoff' in its name and
+    contains a file named 'pacoff-dir'. The current directory is
+    checked first, followed by all which are children of the current
+    working directory. If multiple candidates are found via the second
+    method, then none will be selected.
+    """
+    if (osp.isfile(LC_state["id"])): return "."
     
-    [[ $dircount -eq 0 ]] &&
-        return $EX_notfound
-    [[ $dircount -gt 1 ]] &&
-        return $EX_ambiguous
+    result:str = None
+    for d in sp.run(("find",
+                       ".",
+                       "-name","*pacoff*",
+                       "-type","d",
+                       "-print0"),
+                      capture_output=True,
+                      text=True).stdout.split("\x00"):
+        if (osp.isfile(osp.join(d, LC_state["id"]))):
+            if (result is not None): raise AmbiguityError
+            result = d
     
-    echo "$result"
-    return 0
-}
+    if (result is None): raise FileNotFoundError
+    return result
